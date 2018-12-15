@@ -1,110 +1,92 @@
 package com.techapp.james.todolistrxjava
 
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.util.Log
-import android.widget.ImageView
+import android.view.WindowManager
+import com.bumptech.glide.Glide
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
-import io.reactivex.internal.schedulers.IoScheduler
 import io.reactivex.schedulers.Schedulers
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.android.synthetic.main.activity_main.*
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
     companion object {
         val TAG = "James"
     }
-
-
-
-    var observer = object : Observer<String> {
-        override fun onSubscribe(d: Disposable) {
-            Log.d(TAG, "onSubscribe ${d.isDisposed.toString()}")
-        }
-
-        override fun onNext(t: String) {
-            Log.d(TAG, "onNext $t")
-        }
-
-        override fun onError(e: Throwable) {
-
-            Log.d(TAG, "onError ")
-        }
-
-        override fun onComplete() {
-            Log.d(TAG, "onComplete ")
-        }
-    }
+//    var observer = object : Observer<String> {
+//        override fun onSubscribe(d: Disposable) {
+//            Log.d(TAG, "onSubscribe ${d.isDisposed.toString()}")
+//        }
+//
+//        override fun onNext(t: String) {
+//            Log.d(TAG, "onNext $t")
+//        }
+//
+//        override fun onError(e: Throwable) {
+//
+//            Log.d(TAG, "onError ")
+//        }
+//
+//        override fun onComplete() {
+//            Log.d(TAG, "onComplete ")
+//        }
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         setContentView(R.layout.activity_main)
-        var test = RetrofitManager.getInstance(this)
-        val ob = test.getWeather("Taipei")
+
+        var retrofitManager = RetrofitManager.getInstance(this)
+        val ob = retrofitManager.getWeather("Taipei")
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSuccess { resp ->
-                    Log.d(TAG, resp.toString())
+                    //                    Log.d(TAG, resp.toString())
+                    Timber.d(resp.name)
+
+                    Timber.d(resp.main.temp_max)
+
+                    Timber.d(resp.main.temp)
+
+                    Timber.d(resp.main.temp_min)
+
+                    Timber.d(resp.main.humidity)
+
+                    Timber.d(resp.main.pressure)
                 }
         ob.subscribe()
 
-//        cancel
-//        ob.dispose()
+        var furtureTarget = Glide.with(this).load(R.drawable.weather_app_sunny).submit(root.measuredWidth, root.measuredHeight)
 
-        Flowable.just("Hello world").subscribe(System.out::println)
-
-        var ob1 = Observable.just("hello", "world")
-        var ob2 = Observable.just(1, 2, 3, 4, 5)
-        Observable.combineLatest(
-                ob1,
-                ob2,
-                BiFunction<String, Int, String> { t1, t2 -> t1 + t2 }
-        ).doOnNext {
-            it
-            Log.d(TAG, "DoOnNext")
-        }.subscribe(observer)
-
-
-        Observable.create(ObservableOnSubscribe<Weather>() { emitter ->
-
-        })
-
-
-        var k = ArrayList<String>()
-        var observable = Observable.create(ObservableOnSubscribe<Int>() { emitter ->
-            emitter.setDisposable(object : Disposable {
-                override fun dispose() {
-
-
-                }
-
-                override fun isDisposed(): Boolean {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                }
-
-            })
-            if (!emitter.isDisposed) {
-                emitter.onNext(1)
-                emitter.onNext(2)
+        Observable.create(object : ObservableOnSubscribe<Drawable> {
+            override fun subscribe(emitter: ObservableEmitter<Drawable>) {
+                var drawable = furtureTarget.get()
+                emitter.onNext(drawable)
             }
-//            emitter.onError(Exception())
-//            emitter.onComplete()
+        }).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext { repc ->
+                    root.background = repc
+                }.subscribe()
 
-        })
-                .doOnNext { Log.d(TAG, "Int" + it) }
-                .map { it.toString() }
-                .doOnNext { Log.d(TAG, it) }
-                .subscribe()
-
-//        observable.subscribe()
-//        ob    servable
-//        observable.doOnComplete { }
-
-
-
+        Single.create(object : SingleOnSubscribe<Drawable> {
+            override fun subscribe(emitter: SingleEmitter<Drawable>) {
+                var drawable = furtureTarget.get()
+                emitter.onSuccess(drawable)
+            }
+        }).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSuccess { repc ->
+                    root.background = repc
+                }.subscribe()
     }
 }
