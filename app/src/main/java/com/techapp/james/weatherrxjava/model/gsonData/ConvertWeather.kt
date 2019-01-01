@@ -1,10 +1,9 @@
-package com.techapp.james.todolistrxjava.gsonData
+package com.techapp.james.weatherrxjava.model.gsonData
 
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
-import com.google.gson.JsonObject
-import com.techapp.james.todolistrxjava.Weather
+import com.techapp.james.weatherrxjava.model.weatherAPI.Weather
 import java.lang.reflect.Type
 
 class ConvertWeather : JsonDeserializer<Weather> {

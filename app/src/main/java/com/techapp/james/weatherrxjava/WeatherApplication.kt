@@ -1,4 +1,4 @@
-package com.techapp.james.todolistrxjava
+package com.techapp.james.weatherrxjava
 
 import android.app.Application
 import timber.log.Timber

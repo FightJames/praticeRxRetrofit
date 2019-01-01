@@ -1,7 +1,6 @@
-package com.techapp.james.todolistrxjava
+package com.techapp.james.weatherrxjava.model.weatherAPI
 
 import io.reactivex.Single
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 

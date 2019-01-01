@@ -1,11 +1,7 @@
-package com.techapp.james.todolistrxjava
+package com.techapp.james.weatherrxjava.model.weatherAPI
 
 import android.content.Context
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.techapp.james.todolistrxjava.gsonData.ConvertWeather
-import retrofit2.Call
-import retrofit2.CallAdapter
+import com.techapp.james.weatherrxjava.R
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory

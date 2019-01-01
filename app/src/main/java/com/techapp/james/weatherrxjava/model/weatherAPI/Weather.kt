@@ -1,6 +1,4 @@
-package com.techapp.james.todolistrxjava
-
-import com.google.gson.annotations.SerializedName
+package com.techapp.james.weatherrxjava.model.weatherAPI
 
 class Weather(var name: String,
               var main: Main

@@ -1,4 +1,4 @@
-package com.techapp.james.todolistrxjava
+package com.techapp.james.weatherrxjava
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
